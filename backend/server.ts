@@ -27,3 +27,7 @@ import auth from "./middleware/auth.ts";
 app.get("/api/protected", auth, (req, res) => {
   res.json({ msg: `Hello user ${req.user.id}` });
 });
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
