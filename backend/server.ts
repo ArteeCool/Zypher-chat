@@ -1,8 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
-import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import authRoutes from "./routes/auth.ts";
+import cors from "cors";
+import auth from "./middleware/auth.ts";
 
 // Config
 dotenv.config();
@@ -10,6 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(cors());
 
 // Start server
 app.listen(PORT, () => {
@@ -21,8 +23,6 @@ mongoose.connect(
 );
 
 app.use("/api/auth", authRoutes);
-
-import auth from "./middleware/auth.ts";
 
 app.get("/api/protected", auth, (req, res) => {
   res.json({ msg: `Hello user ${req.user.id}` });
