@@ -15,11 +15,8 @@ app.use(
   cors({
     origin: ["http://localhost:3000", "https://zypher-w04z.onrender.com"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    credentials: true,
   })
 );
-
-app.options("*", cors());
 
 // Start server
 app.listen(PORT, () => {
