@@ -8,13 +8,14 @@ import auth from "./middleware/auth.ts";
 // Config
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(
   cors({
     origin: ["http://localhost:3000", "https://zypher-w04z.onrender.com"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
   })
 );
 
@@ -24,7 +25,7 @@ app.listen(PORT, () => {
 });
 
 mongoose.connect(
-  `mongodb+srv://artemgawrilyuk:${process.env.MONGODB_PASSWORD}@cluster0.c6zcwiu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+  `mongodb+srv://artemgawrilyuk:${process.env.MONGODB_PASSWORD}@cluster0.c6zcwiu.mongodb.net/Zypher?retryWrites=true&w=majority&appName=Cluster0`
 );
 
 app.use("/api/auth", authRoutes);

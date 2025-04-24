@@ -32,7 +32,7 @@ router.post("/register", async (req, res) => {
     res.status(201).json({ msg: "User registered successfully" });
   } catch (error) {
     console.error("Register error:", error);
-    res.status(500).json({ msg: "Server error", data: error });
+    res.status(500).json({ msg: "Server error", error: error });
   }
 });
 
