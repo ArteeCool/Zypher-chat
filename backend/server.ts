@@ -49,7 +49,11 @@ chatSocket.on("change", async (change) => {
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://zypher-w04z.onrender.com"],
+    origin: [
+      "http://localhost:3000",
+      "https://zypher-w04z.onrender.com",
+      "https://dazzling-douhua-5ccf2f.netlify.app",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
