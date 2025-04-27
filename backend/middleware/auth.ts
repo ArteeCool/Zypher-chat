@@ -1,19 +1,19 @@
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
-
-export default function auth(req, res, next) {
-  const token = req.header("Authorization")?.split(" ")[1];
+export const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
-    return res.status(401).json({ msg: "No token, authorization denied" });
+    return res.status(401).json({ ok: false, msg: "No token, not authorized" });
   }
 
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded;
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ ok: false, msg: "Invalid token" });
+    }
+
+    req.user = user;
     next();
-  } catch (err) {
-    res.status(401).json({ msg: "Token is not valid" });
-  }
-}
+  });
+};

@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 import authRoutes from "./routes/auth.ts";
 import chatsRoutes from "./routes/chats.ts";
 import cors from "cors";
-import auth from "./middleware/auth.ts";
 import Chat from "./scemas/chat.scema.ts";
 import http from "http";
 import { WebSocketServer } from "ws";
@@ -69,10 +68,6 @@ const connectDB = async () => {
 };
 
 connectDB();
-
-app.get("/api/protected", auth, (req, res) => {
-  res.json({ msg: `Hello user ${req.user.id}` });
-});
 
 server.listen(PORT, () => {
   console.log(`Server with WebSocket started on http://localhost:${PORT}`);

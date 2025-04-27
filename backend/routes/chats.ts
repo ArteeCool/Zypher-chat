@@ -2,10 +2,11 @@ import express from "express";
 import mongoose from "mongoose";
 import Chat from "../scemas/chat.scema.ts";
 import userScema from "../scemas/user.scema.ts";
+import { authenticateToken } from "../middleware/auth.ts";
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", authenticateToken, async (req, res) => {
   try {
     const userId = req.user._id;
     const chats = (await Chat.find({})).filter((chat) =>
