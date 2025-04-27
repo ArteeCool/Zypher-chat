@@ -27,7 +27,7 @@ router.get("/users", async (req, res) => {
       _id: user._id,
       username: user.username,
     }));
-    res.status(200).json({ ok: true, data: users });
+    res.status(200).json({ ok: true, data: securedUsers });
   } catch (error) {
     res.status(500).json({ ok: false, msg: "Server error" });
   }

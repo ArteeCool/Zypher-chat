@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import authRoutes from "./routes/auth.ts";
 import chatsRoutes from "./routes/chats.ts";
 import cors from "cors";
-import { authenticateToken } from "./middleware/auth.ts";
+import authenticateToken from "./middleware/auth.ts";
 import Chat from "./scemas/chat.scema.ts";
 import http from "http";
 import { WebSocketServer } from "ws";
@@ -71,10 +71,6 @@ const connectDB = async () => {
 connectDB();
 
 app.get("/api/protected", authenticateToken, (req, res) => {
-  if (!req.user || !req.user.id) {
-    return res.status(401).json({ msg: "Unauthorized: Invalid token" });
-  }
-
   res.json({ msg: `Hello user ${req.user.id}` });
 });
 
