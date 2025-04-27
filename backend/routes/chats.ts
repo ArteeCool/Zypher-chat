@@ -7,9 +7,14 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const chats = await Chat.find({});
+    const userId = req.user._id;
+    const chats = (await Chat.find({})).filter((chat) =>
+      chat.participantsIds.includes(userId)
+    );
+
     res.status(200).json({ ok: true, data: chats });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ ok: false, msg: "Server error" });
   }
 });
