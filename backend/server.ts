@@ -71,6 +71,10 @@ const connectDB = async () => {
 connectDB();
 
 app.get("/api/protected", authenticateToken, (req, res) => {
+  if (!req.user || !req.user.id) {
+    return res.status(401).json({ msg: "Unauthorized: Invalid token" });
+  }
+
   res.json({ msg: `Hello user ${req.user.id}` });
 });
 

@@ -23,6 +23,10 @@ router.get("/", authenticateToken, async (req, res) => {
 router.get("/users", async (req, res) => {
   try {
     const users = await userScema.find({});
+    const securedUsers = users.map((user) => ({
+      _id: user._id,
+      username: user.username,
+    }));
     res.status(200).json({ ok: true, data: users });
   } catch (error) {
     res.status(500).json({ ok: false, msg: "Server error" });
