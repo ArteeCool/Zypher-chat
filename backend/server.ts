@@ -36,23 +36,13 @@ wss.on("connection", (ws) => {
 const chatSocket = Chat.watch();
 
 chatSocket.on("change", async (change) => {
-  if (change.operationType === "insert") {
-    const newChat = await Chat.findById(change.documentKey._id).exec();
+  const updatedChats = await Chat.find().exec();
 
-    ioClients.forEach((client) => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({ type: "NEW_CHAT", payload: newChat }));
-      }
-    });
-  } else {
-    const updatedChats = await Chat.find().exec();
-
-    ioClients.forEach((client) => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify(updatedChats));
-      }
-    });
-  }
+  ioClients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify(updatedChats));
+    }
+  });
 });
 
 app.use(express.json());
