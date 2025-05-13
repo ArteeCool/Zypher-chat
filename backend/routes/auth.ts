@@ -42,8 +42,6 @@ router.post("/login", async (req, res) => {
 
     const user = await User.findOne({ email });
 
-    console.log(user);
-
     if (!user) return res.status(400).json({ msg: "User not found" });
 
     if (user.password) {
@@ -53,7 +51,7 @@ router.post("/login", async (req, res) => {
 
       const token = jwt.sign(
         { _id: user._id, username: user.username, email: user.email },
-        JWT_SECRET,
+        process.env.JWT_SECRET,
         { expiresIn: "1h" }
       );
 

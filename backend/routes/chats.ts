@@ -35,7 +35,7 @@ router.get("/users", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const { participantsIds } = req.body;
+    const { name, participantsIds } = req.body;
     const ObjectId = mongoose.Types.ObjectId;
 
     if (participantsIds.some((id) => !ObjectId.isValid(id))) {
@@ -46,6 +46,7 @@ router.post("/", async (req, res) => {
     }
 
     const newChat = new Chat({
+      name,
       participantsIds,
       messages: [{ senderId: "app", text: "Start of the conversation" }],
     });
@@ -61,9 +62,6 @@ router.post("/", async (req, res) => {
 router.put("/", async (req, res) => {
   try {
     const { id, senderId, text } = req.body;
-
-    console.log("Received message with SenderId:", senderId);
-    console.log("Received message Text:", text);
 
     if (!id || !senderId || !text) {
       return res.status(400).json({ ok: false, msg: "Missing fields" });
