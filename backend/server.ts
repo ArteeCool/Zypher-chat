@@ -10,6 +10,7 @@ import https from "https";
 import { WebSocketServer } from "ws";
 import { WebSocket } from "ws";
 import fs from "fs";
+import nodemailer from "nodemailer";
 
 dotenv.config();
 export const app = express();
@@ -71,7 +72,7 @@ app.get("/api/healthcheck", (req, res) => {
   res.status(200).json({ ok: true });
 });
 
-app.get("/", authenticateToken, (req, res) => {
+app.get("/", (req, res) => {
   res.redirect("https://arteecool.com.ua/");
 });
 
@@ -82,6 +83,38 @@ const connectDB = async () => {
 };
 
 connectDB();
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.GMAIL_USERNAME,
+    pass: process.env.GMAIL_PASSWORD,
+  },
+});
+
+app.post("/api/send-confirmation-email", async (req, res) => {
+  const { email, subject, text, html } = req.body;
+
+  const mailOptions = {
+    from: process.env.GMAIL_USERNAME,
+    to: email,
+    subject: subject,
+    text: text,
+    html: html,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    return res.status(200).json({ success: true, message: "Email sent" });
+  } catch (error) {
+    console.error("Error sending confirmation email:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+});
 
 app.get("/api/protected", authenticateToken, (req, res) => {
   res.json({ msg: `Hello user ${req.user.id}` });

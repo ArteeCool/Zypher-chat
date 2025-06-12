@@ -26,6 +26,7 @@ router.get("/users", async (req, res) => {
     const securedUsers = users.map((user) => ({
       _id: user._id,
       username: user.username,
+      confirmationUrl: user.confirmationToken,
     }));
     res.status(200).json({ ok: true, data: securedUsers });
   } catch (error) {
